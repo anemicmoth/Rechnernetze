@@ -10,14 +10,14 @@ import java.util.List;
 public final class Codec {
 
     public static byte[] encode(Message msg){
-        String s = msg.type().getMessage() + " " + msg.parameters();
+        String s = msg.type().getMessage() + " " + msg.paramsAsString();
 
         return s.getBytes(StandardCharsets.UTF_8);
     }
 
     public static Message decode(byte[] data){
         String s = new String(data, StandardCharsets.UTF_8);
-        String[] parts = s.split(" ");
+        /*String[] parts = s.split(" ");
 
         MessageType type = null;
         List<String> parameters = new ArrayList<>();
@@ -29,7 +29,7 @@ public final class Codec {
             else{
                 parameters.add(part);
             }
-        }
-        return new Message(type, parameters);
+        }*/
+        return new Message(s);
     }
 }

@@ -1,5 +1,6 @@
 package tcpconnection;
 
+import bank.Atm;
 import codec.Codec;
 import codec.message.Message;
 
@@ -10,10 +11,9 @@ public class TCPClient
 {
 
     private Socket socket;
-    private BufferedWriter writer;
-    private BufferedReader reader;
     private DataInputStream in;
     private DataOutputStream out;
+    private Atm atm;
 
     public TCPClient()
     {
@@ -22,11 +22,11 @@ public class TCPClient
             socket = new Socket("localhost", 27999);
             System.out.println("TCPClient connected end with \"END\"");
 
-            writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
+
+            atm = new Atm(125_000);
         }
         catch (IOException e)
         {
@@ -77,6 +77,8 @@ public class TCPClient
             client.sendText(msg);
             Message returnMsg = client.receiveText();
             System.out.println(returnMsg.toString());
+            if(!atm.handleRequest(returnMsg)) close();
+
         }
     }
 

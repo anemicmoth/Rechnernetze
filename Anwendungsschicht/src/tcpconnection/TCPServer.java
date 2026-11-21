@@ -1,5 +1,6 @@
 package tcpconnection;
 
+import bank.CentralComputer;
 import codec.Codec;
 import codec.message.Message;
 
@@ -13,10 +14,12 @@ public class TCPServer<ClientSocket>
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
+    private CentralComputer centralComputer;
     private ServerSocket serverSocket;
 
     public TCPServer()
     {
+        centralComputer = new CentralComputer();
         try {
             this.serverSocket = new ServerSocket(27999);
             System.out.println("Warte auf Client...");
@@ -63,7 +66,8 @@ public class TCPServer<ClientSocket>
                     System.out.printf("Vom Client (%s) empfangen: %s%n", socket.getRemoteSocketAddress(), line);
 
                     Message msg = new Message(line);
-                    byte[] payload = Codec.encode(msg);
+                    Message response = centralComputer.handleRequest(msg);
+                    byte[] payload = Codec.encode(response);
 
                     if(payload.length > 65_536) throw new IOException("Frame too lengthy.");
                     out.writeInt(payload.length);

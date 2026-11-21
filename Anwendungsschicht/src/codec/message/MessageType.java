@@ -7,9 +7,8 @@ public enum MessageType {
     DISPENSE("DISPENSE"),
     QUIT("QUIT"),
     OK("OK"),
-    APPROVED("APPROVED"),
-    COMMITTED("COMMITTED"),
     FAILED("FAILED");
+
 
     private final String message;
 
@@ -18,5 +17,13 @@ public enum MessageType {
     }
 
     public String getMessage(){ return message; }
+
+    public static MessageType tryGetValue(String str){
+        try{
+            return MessageType.valueOf(str);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
 
 }

@@ -5,29 +5,49 @@ import java.util.List;
 
 public class Message {
     private MessageType msgType = null;
+    private MessageStatus msgStatus = null;
+    private MessageError msgError = null;
     private List<String> parameters;
 
-    public Message(MessageType msgType, List<String> parameters) {
+    public Message(MessageType msgType, MessageStatus status, MessageError error, List<String> parameters) {
         this.msgType = msgType;
-        this.parameters = new ArrayList<>(parameters);
+        this.msgStatus = status;
+        this.msgError = error;
+        this.parameters = new
+                ArrayList<>(parameters);
     }
 
     public Message(String message){
         String[] parts = message.split(" ");
+        boolean partSet = false;
         parameters = new ArrayList<>();
         for(String part:parts){
             if(msgType == null){
-                msgType = MessageType.valueOf(part);
+                msgType = MessageType.tryGetValue(part);
+                if(msgType != null) partSet = true;
             }
-            else{
+            if (msgError == null) {
+                msgError = MessageError.tryGetValue(part);
+                if(msgError != null) partSet = true;
+            }
+            if (msgStatus == null) {
+                msgStatus = MessageStatus.tryGetValue(part);
+                if(msgStatus != null) partSet = true;
+            }
+            if(!partSet){
                 parameters.add(part);
             }
+            partSet = false;
         }
     }
 
     public MessageType type(){ return msgType; }
 
-    public String parameters(){
+    public MessageStatus status() { return msgStatus; }
+
+    public MessageError error() { return msgError; }
+
+    public String paramsAsString(){
         StringBuilder s = new StringBuilder();
         for(int i = 0; i<parameters.size(); i++){
             if(i == parameters.size()-1){
@@ -39,8 +59,13 @@ public class Message {
         return s.toString();
     }
 
+    public List<String> parameters(){ return parameters; }
+
     @Override
     public String toString(){
-        return msgType.getMessage() + " " + parameters();
+        String str = msgType.getMessage();
+        if(msgStatus != null) str += " " + msgStatus.getStatus();
+        if(msgError != null) str += " " + msgError.getError();
+        return str + " " + paramsAsString();
     }
 }
