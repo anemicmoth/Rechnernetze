@@ -67,6 +67,7 @@ public class TCPClient
 
     public void handleInput(TCPClient client) throws IOException {
         final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        
         while (true)
         {
             final String line = reader.readLine();
@@ -75,7 +76,9 @@ public class TCPClient
                 break;
             }
             client.sendText(msg);
+            
             Message returnMsg = client.receiveText();
+
             System.out.println(returnMsg.toString());
             if(!atm.handleRequest(returnMsg)) close();
 
@@ -100,7 +103,8 @@ public class TCPClient
     {
         TCPClient TCPClient = new TCPClient();
 
-            TCPClient.handleInput(TCPClient);
+        TCPClient.handleInput(TCPClient);
+
         TCPClient.close();
     }
 }

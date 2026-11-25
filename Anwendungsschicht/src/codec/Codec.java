@@ -1,11 +1,8 @@
 package codec;
 
 import codec.message.Message;
-import codec.message.MessageType;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 public final class Codec {
 

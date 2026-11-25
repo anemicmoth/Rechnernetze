@@ -13,31 +13,31 @@ public class Message {
         this.msgType = msgType;
         this.msgStatus = status;
         this.msgError = error;
-        this.parameters = new
-                ArrayList<>(parameters);
+        this.parameters = (parameters != null && !parameters.isEmpty()) ? 
+                new ArrayList<>(parameters):
+                new ArrayList<>();
     }
 
     public Message(String message){
         String[] parts = message.split(" ");
-        boolean partSet = false;
         parameters = new ArrayList<>();
+        
         for(String part:parts){
+
             if(msgType == null){
                 msgType = MessageType.tryGetValue(part);
-                if(msgType != null) partSet = true;
             }
-            if (msgError == null) {
+
+            else if (msgError == null) {
                 msgError = MessageError.tryGetValue(part);
-                if(msgError != null) partSet = true;
             }
-            if (msgStatus == null) {
+
+            else if (msgStatus == null) {
                 msgStatus = MessageStatus.tryGetValue(part);
-                if(msgStatus != null) partSet = true;
             }
-            if(!partSet){
-                parameters.add(part);
-            }
-            partSet = false;
+
+            else parameters.add(part);
+          
         }
     }
 

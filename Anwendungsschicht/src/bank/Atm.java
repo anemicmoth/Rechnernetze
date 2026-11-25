@@ -22,20 +22,35 @@ public class Atm {
     }
 
     public boolean handleRequest(Message request){
+        // TODO: lastSentMessage als null abfangen
+        
+        if(lastSentMessage == null){
+            setLastSentMessage(request);
+            return false;
+        }
+
         switch(lastSentMessage.type()){
             case MessageType.AUTH, MessageType.BALANCE, MessageType.WITHDRAW:
                 return request.type() == MessageType.OK;
-            case MessageType.DISPENSE:
+            
+            case MessageType.DISPENSE:{
+
                 if(request.type() != MessageType.OK) return false;
+
                 try{
                     double amount = Double.parseDouble(request.parameters().getFirst());
-                    withdrawAmount(amount);
+                    return withdrawAmount(amount);
                 } catch (NumberFormatException e){
-                    System.out.println(e.getMessage());
+                    System.err.println(e.getMessage());
                 }
-                return true;
 
+            }
+
+            default: return false;
         }
-        return false;
+        
+
+
     }
+
 }

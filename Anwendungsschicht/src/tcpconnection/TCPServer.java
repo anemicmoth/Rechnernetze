@@ -8,7 +8,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class TCPServer<ClientSocket>
+public class TCPServer
 {
     private boolean connected;
     private Socket socket;
@@ -78,6 +78,7 @@ public class TCPServer<ClientSocket>
                     connected = false;
                 }
             }
+            
             catch (IOException e)
             {
                 System.out.println(e.getMessage());
