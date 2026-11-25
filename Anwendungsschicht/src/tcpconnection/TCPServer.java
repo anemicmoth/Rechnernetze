@@ -61,11 +61,10 @@ public class TCPServer
                 in.readFully(bytes);
 
                 if (bytes.length != 0) {
-                    String line = Codec.decode(bytes).toString();
+                    Message msg = Codec.decode(bytes);
 
-                    System.out.printf("Vom Client (%s) empfangen: %s%n", socket.getRemoteSocketAddress(), line);
+                    System.out.printf("Vom Client (%s) empfangen: %s%n", socket.getRemoteSocketAddress(), msg.toString());
 
-                    Message msg = new Message(line);
                     Message response = centralComputer.handleRequest(msg);
                     byte[] payload = Codec.encode(response);
 
@@ -82,6 +81,7 @@ public class TCPServer
             catch (IOException e)
             {
                 System.out.println(e.getMessage());
+                connected = false;
                 return;
             }
         }

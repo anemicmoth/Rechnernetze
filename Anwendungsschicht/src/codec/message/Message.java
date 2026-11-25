@@ -24,15 +24,15 @@ public class Message {
         
         for(String part:parts){
 
-            if(msgType == null){
+            if(MessageType.tryGetValue(part) != null){
                 msgType = MessageType.tryGetValue(part);
             }
 
-            else if (msgError == null) {
+            else if (MessageError.tryGetValue(part) != null) {
                 msgError = MessageError.tryGetValue(part);
             }
 
-            else if (msgStatus == null) {
+            else if (MessageStatus.tryGetValue(part) != null) {
                 msgStatus = MessageStatus.tryGetValue(part);
             }
 

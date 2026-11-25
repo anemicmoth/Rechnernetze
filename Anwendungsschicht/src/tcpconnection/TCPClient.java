@@ -76,11 +76,15 @@ public class TCPClient
                 break;
             }
             client.sendText(msg);
+            atm.setLastSentMessage(msg);
             
             Message returnMsg = client.receiveText();
+            if(returnMsg == null) break;
 
             System.out.println(returnMsg.toString());
-            if(!atm.handleRequest(returnMsg)) close();
+
+            boolean ok = atm.handleRequest(returnMsg);
+            if(!ok) System.out.println("Anfrage wurde nicht bestätigt.");
 
         }
     }
